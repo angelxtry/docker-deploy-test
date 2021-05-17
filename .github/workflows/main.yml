@@ -27,3 +27,17 @@ jobs:
       - run: |
           yarn install
           yarn build
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: nest-deploy-app
+          environment_name: Nestdeployapp-env
+          version_label: 1
+          region: ap-southeast-1
+          deployment_package: deploy.zip
