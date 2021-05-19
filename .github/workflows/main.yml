@@ -24,12 +24,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: |
-          yarn install
-          yarn build
+          
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
 
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git* node_modules'
+        run: zip -r deploy.zip . -x '*.git*' 'node_modules/*'
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v16
@@ -37,8 +41,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: nest-deploy-app
-          environment_name: Nestdeployapp-env
-          version_label: 1
+          environment_name: Nestdeployapp-env-1
+          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-southeast-1
-          deployment_package: deploy.zip
-          use_existing_version_if_available: true
+          deployment_package: deploy.zip         
