@@ -24,12 +24,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: |
-          yarn install
-          yarn build
 
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git* node_modules'
+        run: zip -r deploy.zip . -x '*.git*' 'node_modules/*'
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v16
