@@ -4,6 +4,6 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   @Get()
   checkHealth() {
-    return 'Hello Nest!!!!!!!!!!!!!';
+    return 'Hello Auto Deploy!!!!!!!!!!!!!';
   }
 }
